@@ -5,6 +5,7 @@ import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
+  signOut,
 } from "../redux/user/userSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
@@ -40,6 +41,15 @@ export default function Profile() {
       setUpdateSuccess(true);
     } catch (error) {
       dispatch(updateUserFailure(error));
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await fetch("api/auth/sign-out");
+      dispatch(signOut());
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -125,7 +135,10 @@ export default function Profile() {
           {loading ? "Loading..." : "Update"}
         </button>
       </form>
-      <button className="w-full mt-5 bg-red-700 text-white p-3 rounded-full uppercase hover:opacity-95 disabled:opacity-80">
+      <button
+        onClick={handleSignOut}
+        className="w-full mt-5 bg-red-700 text-white p-3 rounded-full uppercase hover:opacity-95 disabled:opacity-80"
+      >
         Sign out
       </button>
       <p className="text-red-700 mt-5">{error && "Something went wrong!"}</p>
