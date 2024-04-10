@@ -82,7 +82,7 @@ function LoginPage() {
         setSuError(true);
         return;
       }
-      navigate("/sign-in");
+      handleSignInClick();
     } catch (error) {
       setSuLoading(false);
       setSuError(true);
