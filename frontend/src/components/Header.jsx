@@ -4,15 +4,14 @@ import { useSelector } from "react-redux";
 function Header() {
   const { currentUser } = useSelector((state) => state.user);
   return (
-    <div className="bg-slate-200">
+    <div className="bg-custom-white">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
         <Link to="/">
-          <h1 className="font-bold">MERN Auth</h1>
+          <h1 className="font-bold uppercase text-xl hover:text-custom-dark-blue">
+            Tracify
+          </h1>
         </Link>
-        <ul className="flex gap-4">
-          <Link to="/">
-            <li>Home</li>
-          </Link>
+        <ul className="flex gap-8">
           <Link to="/about">
             <li>About</li>
           </Link>

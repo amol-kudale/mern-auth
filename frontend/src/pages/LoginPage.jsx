@@ -40,7 +40,7 @@ function LoginPage() {
         return;
       }
       dispatch(signInSuccess(data));
-      navigate("/");
+      navigate("/home");
     } catch (error) {
       dispatch(signInFailure(error));
     }
