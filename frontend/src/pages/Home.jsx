@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
@@ -10,13 +10,95 @@ function Home() {
     return classes.filter(Boolean).join(" ");
   }
 
+  const [projects, showProjects] = useState(false);
+  const [projectFormData, setProjectFormData] = useState({});
+  const [projectError, setProjectError] = useState(false);
+  const [projectLoading, setProjectLoading] = useState(false);
+
+  const [team, showTeam] = useState(false);
+  const [memberFormData, setMemberFormData] = useState({});
+  const [memberError, setMemberError] = useState(false);
+  const [memberLoading, setMemberLoading] = useState(false);
+
+  const handleProjectClick = () => {
+    showProjects(true);
+  };
+
+  const handleProjectChange = (e) => {
+    setProjectFormData({ ...projectFormData, [e.target.id]: e.target.value });
+    console.log(projectFormData);
+  };
+
+  const handleProjectSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setProjectLoading(true);
+      setProjectError(false);
+      const res = await fetch(`/api/user/create-project/${currentUser._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(projectFormData),
+      });
+      const data = await res.json();
+      setProjectLoading(false);
+      if (data.success == false) {
+        setProjectError(true);
+        return;
+      }
+      showProjects(false);
+      navigate("/");
+    } catch (error) {
+      setProjectLoading(false);
+      setProjectError(true);
+    }
+  };
+
+  const handleMemberClick = () => {
+    showTeam(true);
+  };
+
+  const handleMemberChange = (e) => {
+    setMemberFormData({ ...memberFormData, [e.target.id]: e.target.value });
+    console.log(memberFormData);
+  };
+
+  const handleMemberSubmit = async (e) => {
+    e.preventDefault();
+    // try {
+    //   setProjectLoading(true);
+    //   setProjectError(false);
+    //   const res = await fetch(`/api/user/create-project/${currentUser._id}`, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(projectFormData),
+    //   });
+    //   const data = await res.json();
+    //   setProjectLoading(false);
+    //   if (data.success == false) {
+    //     setProjectError(true);
+    //     return;
+    //   }
+    //   showProjects(false);
+    //   navigate("/");
+    // } catch (error) {
+    //   setProjectLoading(false);
+    //   setProjectError(true);
+    // }
+  };
+
   return (
     <div>
-      <div className="flex justify-between items-center max-w-6xl mx-auto p-3 mt-7 bg-custom-white rounded-lg">
-        <h1 className="text-xl">Welcome, {currentUser.username}</h1>
+      <div className="flex justify-between items-center max-w-6xl mx-auto p-3 mt-7 bg-custom-white rounded-lg shadow shadow-custom-gray">
+        <h1 className="text-xl font-medium ml-5">
+          Welcome, {currentUser.username}
+        </h1>
       </div>
-      <div className="flex justify-between items-center max-w-6xl mx-auto p-3 mt-7 bg-custom-white rounded-lg">
-        <Menu as="div" className="relative inline-block text-left ">
+      <div className="flex justify-between items-center max-w-6xl mx-auto py-3 mt-7 bg-custom-white rounded-lg shadow shadow-custom-gray">
+        <Menu as="div" className="relative inline-block text-left ml-5">
           <div>
             <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
               Your projects
@@ -87,8 +169,9 @@ function Home() {
                         active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                         "block px-4 py-2 text-sm"
                       )}
+                      onClick={handleProjectClick}
                     >
-                      Add new project
+                      Create new project
                     </a>
                   )}
                 </Menu.Item>
@@ -96,7 +179,7 @@ function Home() {
             </Menu.Items>
           </Transition>
         </Menu>
-        <Menu as="div" className="relative inline-block text-left ">
+        <Menu as="div" className="relative inline-block text-left mr-5">
           <div>
             <Menu.Button className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
               Your team
@@ -167,8 +250,9 @@ function Home() {
                         active ? "bg-gray-100 text-gray-900" : "text-gray-700",
                         "block px-4 py-2 text-sm"
                       )}
+                      onClick={handleMemberClick}
                     >
-                      Add new member
+                      Create new member
                     </a>
                   )}
                 </Menu.Item>
@@ -177,6 +261,132 @@ function Home() {
           </Transition>
         </Menu>
       </div>
+      {projects == true && (
+        <div className="max-w-6xl mx-auto p-3 mt-7 bg-custom-white rounded-lg shadow shadow-custom-gray">
+          <h3 className="font-medium text-lg ml-5">Create new project</h3>
+          <form
+            onSubmit={handleProjectSubmit}
+            className="flex flex-col gap-4 mt-4"
+          >
+            <div className="grid grid-cols-2 gap-4">
+              <div className="form-field">
+                <label htmlFor="name" className="text-sm ml-5">
+                  Project name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                  onChange={handleProjectChange}
+                />
+              </div>
+
+              <div className="form-field">
+                <label htmlFor="type" className="text-sm ml-5">
+                  Type
+                </label>
+                <input
+                  type="text"
+                  id="type"
+                  className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                  onChange={handleProjectChange}
+                />
+              </div>
+            </div>
+            <div className="form-field">
+              <label htmlFor="address" className="text-sm ml-5">
+                Address
+              </label>
+              <input
+                type="text"
+                id="address"
+                className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                onChange={handleProjectChange}
+              />
+            </div>
+            <div className="form-field">
+              <label htmlFor="description" className="text-sm ml-5">
+                Project description
+              </label>
+              <textarea
+                type="text"
+                id="description"
+                className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                onChange={handleProjectChange}
+              />
+            </div>
+            <button className="bg-custom-dark-blue mt-3 text-white p-3 rounded-full uppercase hover:opacity-95 disabled:opacity-80">
+              {projectLoading ? "Loading..." : "Save"}
+            </button>
+          </form>
+        </div>
+      )}
+
+      {team == true && (
+        <div className="max-w-6xl mx-auto p-3 mt-7 bg-custom-white rounded-lg shadow shadow-custom-gray">
+          <h3 className="font-medium text-lg ml-5">Create new member</h3>
+          <form
+            onSubmit={handleMemberSubmit}
+            className="flex flex-col gap-4 mt-4"
+          >
+            <div className="grid grid-cols-2 gap-4">
+              <div className="form-field">
+                <label htmlFor="name" className="text-sm ml-5">
+                  Member name
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                  onChange={handleMemberChange}
+                />
+              </div>
+
+              <div className="form-field">
+                <label htmlFor="role" className="text-sm ml-5">
+                  Role
+                </label>
+                <input
+                  type="text"
+                  id="role"
+                  className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                  onChange={handleMemberChange}
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="form-field">
+                <label htmlFor="mobileNumber" className="text-sm ml-5">
+                  Mobile number
+                </label>
+                <input
+                  type="text"
+                  id="mobileNumber"
+                  className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                  onChange={handleMemberChange}
+                />
+              </div>
+
+              <div className="form-field">
+                <label htmlFor="email" className="text-sm ml-5">
+                  Email address
+                </label>
+                <input
+                  type="email"
+                  id="email"
+                  className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                  onChange={handleMemberChange}
+                />
+              </div>
+            </div>
+
+            <button className="bg-custom-dark-blue mt-3 text-white p-3 rounded-full uppercase hover:opacity-95 disabled:opacity-80">
+              {memberLoading ? "Loading..." : "Save"}
+            </button>
+          </form>
+        </div>
+      )}
     </div>
   );
 }

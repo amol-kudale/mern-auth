@@ -21,6 +21,12 @@ const userSchema = new mongoose.Schema(
       default:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQA8cTn1-RRcQ_T4-cf40vYi4sjFEADIdog1TqwvXO3kw&s",
     },
+    createdProjects: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Project",
+      },
+    ],
   },
   { timestamps: true }
 );
@@ -32,8 +38,6 @@ const teamMemberSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: true,
-    unique: true,
   },
   mobileNumber: {
     type: String,
@@ -53,8 +57,13 @@ const projectSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
   },
   type: {
+    type: String,
+    required: true,
+  },
+  address: {
     type: String,
     required: true,
   },
