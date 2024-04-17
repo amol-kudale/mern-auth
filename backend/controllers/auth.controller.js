@@ -1,7 +1,12 @@
-import User from "../models/user.model.js";
+import { User, TeamUser } from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
+import twilio from "twilio";
+
+const accountSid = "AC895f65c1449c27092afa370d72c34ab0";
+const authToken = "8b221d8c4bc5868c0fff3b2ac8711989";
+const client = twilio(accountSid, authToken);
 
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -80,4 +85,29 @@ export const google = async (req, res, next) => {
 
 export const signout = (req, res) => {
   res.clearCookie("access_token").status(200).json("Signed out successfully");
+};
+
+const generateOTP = () => {
+  let digits = "0123456789";
+  let OTP = "";
+  for (let i = 0; i < 4; i++) {
+    OTP += digits[Math.floor(Math.random() * 10)];
+  }
+  return OTP;
+};
+
+export const sendOTP = async (req, res) => {
+  const { mobileNumber } = req.body;
+  try {
+    const OTP = generateOTP();
+    await client.messages.create({
+      body: `Your OTP verification code is ${OTP}`,
+      messagingServiceSid: "MGcbd5e6a48f85c18d0e8dac452aa9fa45",
+      to: mobileNumber,
+    });
+    res.status(200).json({ message: "OTP sent successfully" });
+  } catch (error) {
+    console.error("Error sending OTP:", error);
+    res.status(500).json({ error: "Failed to send OTP" });
+  }
 };
