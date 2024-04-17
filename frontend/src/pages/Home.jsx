@@ -19,6 +19,7 @@ function Home() {
   const [memberFormData, setMemberFormData] = useState({});
   const [memberError, setMemberError] = useState(false);
   const [memberLoading, setMemberLoading] = useState(false);
+  const [sendOTP, setSendOTP] = useState(false);
 
   const handleProjectClick = () => {
     showProjects(true);
@@ -66,28 +67,30 @@ function Home() {
 
   const handleMemberSubmit = async (e) => {
     e.preventDefault();
-    // try {
-    //   setProjectLoading(true);
-    //   setProjectError(false);
-    //   const res = await fetch(`/api/user/create-project/${currentUser._id}`, {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(projectFormData),
-    //   });
-    //   const data = await res.json();
-    //   setProjectLoading(false);
-    //   if (data.success == false) {
-    //     setProjectError(true);
-    //     return;
-    //   }
-    //   showProjects(false);
-    //   navigate("/");
-    // } catch (error) {
-    //   setProjectLoading(false);
-    //   setProjectError(true);
-    // }
+    showTeam(false);
+    navigate("/otp-verify");
+  };
+
+  const handleOTPSend = async (e) => {
+    e.preventDefault();
+    setSendOTP(true);
+    try {
+      const res = await fetch(`/api/auth/send-otp`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ mobileNumber: memberFormData.mobileNumber }),
+      });
+      const data = await res.json();
+      if (data.error) {
+        console.error("Error sending OTP:", data.error);
+        return;
+      }
+      console.log("OTP sent successfully");
+    } catch (error) {
+      console.error("Error sending OTP:", error);
+    }
   };
 
   return (
@@ -293,16 +296,29 @@ function Home() {
                 />
               </div>
             </div>
-            <div className="form-field">
-              <label htmlFor="address" className="text-sm ml-5">
-                Address
-              </label>
-              <input
-                type="text"
-                id="address"
-                className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
-                onChange={handleProjectChange}
-              />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="form-field">
+                <label htmlFor="address" className="text-sm ml-5">
+                  Address
+                </label>
+                <input
+                  type="text"
+                  id="address"
+                  className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                  onChange={handleProjectChange}
+                />
+              </div>
+              <div className="form-field">
+                <label htmlFor="city" className="text-sm ml-5">
+                  City
+                </label>
+                <input
+                  type="text"
+                  id="city"
+                  className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                  onChange={handleProjectChange}
+                />
+              </div>
             </div>
             <div className="form-field">
               <label htmlFor="description" className="text-sm ml-5">
@@ -325,10 +341,7 @@ function Home() {
       {team == true && (
         <div className="max-w-6xl mx-auto p-3 mt-7 bg-custom-white rounded-lg shadow shadow-custom-gray">
           <h3 className="font-medium text-lg ml-5">Create new member</h3>
-          <form
-            onSubmit={handleMemberSubmit}
-            className="flex flex-col gap-4 mt-4"
-          >
+          <form onSubmit={handleOTPSend} className="flex flex-col gap-4 mt-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="form-field">
                 <label htmlFor="name" className="text-sm ml-5">
@@ -381,8 +394,33 @@ function Home() {
               </div>
             </div>
 
-            <button className="bg-custom-dark-blue mt-3 text-white p-3 rounded-full uppercase hover:opacity-95 disabled:opacity-80">
-              {memberLoading ? "Loading..." : "Save"}
+            {sendOTP === true && (
+              <>
+                <div className="form-field">
+                  <label htmlFor="otp" className="text-sm ml-5">
+                    Enter the 4-digit code sent to $
+                    {memberFormData.mobileNumber}
+                  </label>
+                  <div className="grid grid-cols-2 gap-4">
+                    <input
+                      type="number"
+                      id="otp"
+                      className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                      onChange={handleMemberChange}
+                    />
+                    <button className="bg-custom-dark-blue mt-3 text-white p-3 max-w-40 rounded-full uppercase hover:opacity-95 disabled:opacity-80">
+                      {memberLoading ? "Loading..." : "Resend OTP"}
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+
+            <button
+              onClick={handleOTPSend}
+              className="bg-custom-dark-blue mt-3 text-white p-3 rounded-full uppercase hover:opacity-95 disabled:opacity-80"
+            >
+              {memberLoading ? "Loading..." : "Send OTP"}
             </button>
           </form>
         </div>

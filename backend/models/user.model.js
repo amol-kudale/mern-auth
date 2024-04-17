@@ -31,25 +31,37 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const teamMemberSchema = new mongoose.Schema({
+const teamUserSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
   },
   email: {
     type: String,
-  },
-  mobileNumber: {
-    type: String,
     required: true,
+    unique: true,
   },
   role: {
     type: String,
     required: true,
   },
-  accessPermissions: {
-    type: [String], //access permissions as an array of strings
-    default: [],
+  mobileNumber: {
+    type: Number,
+    required: true,
+    unique: true,
+  },
+  otp: {
+    type: Number,
+    require: true,
+  },
+  otpExpiration: {
+    type: Date,
+
+    default: () => new Date(new Date().getTime() + 5 * 60 * 1000),
+  },
+  verified: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -67,11 +79,15 @@ const projectSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  city: {
+    type: String,
+    required: true,
+  },
   description: {
     type: String,
   },
   teamMembers: {
-    type: [teamMemberSchema], // Define team members as an array of teamMemberSchema
+    type: [teamUserSchema], // Define team members as an array of teamMemberSchema
     default: [],
   },
 });
@@ -126,13 +142,13 @@ const floorSchema = new mongoose.Schema({
 
 // Create models based on the schemas
 const User = mongoose.model("User", userSchema);
-const TeamMember = mongoose.model("TeamMember", teamMemberSchema);
+const TeamUser = mongoose.model("TeamMember", teamUserSchema);
 const Project = mongoose.model("Project", projectSchema);
 const Wing = mongoose.model("Wing", wingSchema);
 const Floor = mongoose.model("Floor", floorSchema);
 const Flat = mongoose.model("Flat", flatSchema);
 // const Assignment = mongoose.model("Assignment", assignmentSchema);
 
-export { User, TeamMember, Project, Wing, Floor, Flat };
+export { User, TeamUser, Project, Wing, Floor, Flat };
 
 export default User;

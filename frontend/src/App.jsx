@@ -19,6 +19,7 @@ export default function App() {
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile></Profile>}></Route>
         </Route>
+        <Route path="/otp-verify" element={<LoginPage></LoginPage>}></Route>
       </Routes>
     </BrowserRouter>
     // <LoginPage></LoginPage>

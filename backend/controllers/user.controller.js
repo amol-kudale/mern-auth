@@ -35,7 +35,7 @@ export const updateUser = async (req, res, next) => {
 };
 
 export const createProject = async (req, res, next) => {
-  const { name, type, address, description } = req.body;
+  const { name, type, address, city, description } = req.body;
   const userId = req.params.id;
 
   try {
@@ -44,6 +44,7 @@ export const createProject = async (req, res, next) => {
       name: name,
       type: type,
       address: address,
+      city: city,
       description: description,
     });
 
