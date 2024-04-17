@@ -4,9 +4,7 @@ import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
 import twilio from "twilio";
 
-const accountSid = "AC895f65c1449c27092afa370d72c34ab0";
-const authToken = "8b221d8c4bc5868c0fff3b2ac8711989";
-const client = twilio(accountSid, authToken);
+const client = twilio(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
 
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -102,7 +100,7 @@ export const sendOTP = async (req, res) => {
     const OTP = generateOTP();
     await client.messages.create({
       body: `Your OTP verification code is ${OTP}`,
-      messagingServiceSid: "MGcbd5e6a48f85c18d0e8dac452aa9fa45",
+      messagingServiceSid: process.env.SERVICE_ID,
       to: mobileNumber,
     });
     res.status(200).json({ message: "OTP sent successfully" });
