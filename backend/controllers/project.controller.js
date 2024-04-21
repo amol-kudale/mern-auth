@@ -1,4 +1,4 @@
-import { User, Project } from "../models/user.model.js";
+import { User, Project, Wing } from "../models/user.model.js";
 
 export const createProject = async (req, res, next) => {
   const { name, type, address, city, description } = req.body;
@@ -30,32 +30,35 @@ export const createProject = async (req, res, next) => {
     await user.save();
 
     // Respond with success message
-    res.status(201).json({ message: "Project created successfully" });
+    res.status(201).json(newProject);
   } catch (error) {
     // Handle errors
     next(error);
   }
 };
 
-export const updateProject = async (req, res, next) => {
-  const { wingDetails } = req.body;
+export const createWing = async (req, res, next) => {
+  const { wingName, numberOfFloors } = req.body;
   const projectId = req.params.id;
 
   try {
+    const newWing = new Wing({
+      wingName,
+      numberOfFloors,
+    });
+
+    await newWing.save();
+
     const project = await Project.findById(projectId);
     if (!project) {
       return res.status(404).json({ message: "Project not found" });
     }
 
-    const updatedProject = await Project.findByIdAndUpdate(
-      projectId,
-      {
-        wingDetails: wingDetails,
-      },
-      { new: true }
-    );
+    project.createdWings.push(newWing._id);
 
-    res.status(200).json(updatedProject);
+    await project.save();
+
+    res.status(201).json({ message: "Wing created successfully" });
   } catch (error) {
     next(error);
   }

@@ -86,10 +86,12 @@ const projectSchema = new mongoose.Schema({
   description: {
     type: String,
   },
-  wingDetails: {
-    type: Array,
-    default: [],
-  },
+  createdWings: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Wing",
+    },
+  ],
   teamMembers: {
     type: [teamUserSchema],
     default: [],

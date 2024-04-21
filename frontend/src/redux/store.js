@@ -1,9 +1,13 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import userReducer, { updateCreatedProjects } from "./user/userSlice.js"; // Import the new action
+import userReducer from "./user/userSlice.js";
+import projectReducer from "./project/projectSlice.js";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
-const rootReducer = combineReducers({ user: userReducer });
+const rootReducer = combineReducers({
+  user: userReducer,
+  project: projectReducer,
+});
 
 const persistConfig = {
   key: "root",
@@ -21,21 +25,4 @@ export const store = configureStore({
     }),
 });
 
-// Add a listener to persist updated state
-store.subscribe(() => {
-  const state = store.getState();
-  const createdProjects = state.user.currentUser?.createdProjects;
-  if (createdProjects) {
-    localStorage.setItem("createdProjects", JSON.stringify(createdProjects));
-  }
-});
-
 export const persistor = persistStore(store);
-
-// Add a function to update createdProjects from localStorage
-export const hydrateStore = () => {
-  const createdProjects = localStorage.getItem("createdProjects");
-  if (createdProjects) {
-    store.dispatch(updateCreatedProjects(JSON.parse(createdProjects)));
-  }
-};

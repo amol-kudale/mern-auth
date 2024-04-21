@@ -1,12 +1,21 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import {
+  createProjectStart,
+  createProjectSuccess,
+  createProjectFailure,
+} from "../redux/project/projectSlice";
 
 function Home() {
   const { currentUser } = useSelector((state) => state.user);
+  const { loading: projectLoading, error: projectError } = useSelector(
+    (state) => state.project
+  );
+  const dispatch = useDispatch();
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
@@ -14,8 +23,6 @@ function Home() {
 
   const [projects, showProjects] = useState(false);
   const [projectFormData, setProjectFormData] = useState({});
-  const [projectError, setProjectError] = useState(false);
-  const [projectLoading, setProjectLoading] = useState(false);
 
   const [team, showTeam] = useState(false);
   const [memberFormData, setMemberFormData] = useState({});
@@ -34,8 +41,7 @@ function Home() {
   const handleProjectSubmit = async (e) => {
     e.preventDefault();
     try {
-      setProjectLoading(true);
-      setProjectError(false);
+      dispatch(createProjectStart()); // Dispatch start action
       const res = await fetch(
         `/api/project/create-project/${currentUser._id}`,
         {
@@ -47,18 +53,17 @@ function Home() {
         }
       );
       const data = await res.json();
-      setProjectLoading(false);
       if (data.success == false) {
-        setProjectError(true);
+        dispatch(createProjectFailure(data)); // Dispatch failure action with error
         return;
       }
-      console.log(projectFormData);
+      console.log(data);
+      dispatch(createProjectSuccess(data)); // Dispatch success action with project data
       showProjects(false);
-      navigate("/new-project", { state: { projectFormData } });
+      navigate("/new-project");
     } catch (error) {
       console.log(error);
-      setProjectLoading(false);
-      setProjectError(true);
+      dispatch(createProjectFailure(error)); // Dispatch failure action with error message
     }
   };
 
@@ -100,7 +105,7 @@ function Home() {
   };
 
   return (
-    <div>
+    <>
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3 mt-7 bg-custom-white rounded-lg shadow shadow-custom-gray">
         <h1 className="text-xl font-medium ml-5">
           Welcome, {currentUser.username}
@@ -431,7 +436,7 @@ function Home() {
           </form>
         </div>
       )}
-    </div>
+    </>
   );
 }
 

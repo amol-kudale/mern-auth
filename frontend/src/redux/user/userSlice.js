@@ -39,10 +39,6 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = false;
     },
-    // Add action for updating createdProjects
-    updateCreatedProjects: (state, action) => {
-      state.currentUser.createdProjects = action.payload;
-    },
   },
 });
 

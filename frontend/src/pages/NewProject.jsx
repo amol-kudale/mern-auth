@@ -1,134 +1,105 @@
 import React, { useState } from "react";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Space } from "antd";
-import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { hydrateStore } from "../redux/store";
 
-// Trigger the hydrateStore function when the window loads
-window.onload = () => {
-  hydrateStore();
-};
+// window.onload = () => {
+//   hydrateStore();
+// };
 
 export default function NewProject() {
-  const location = useLocation();
-  const projectFormData = location.state.projectFormData || {};
-  const { currentUser } = useSelector((state) => state.user);
+  const { projects } = useSelector((state) => state.project);
+  const projectName = projects[projects.length - 1].name;
+  const projectId = projects[projects.length - 1]._id;
 
-  const createdProjects = currentUser.createdProjects || [];
+  const [wings, showWings] = useState(false);
+  const [wingFormData, setWingFormData] = useState({});
 
-  const onFinish = async (values) => {
-    console.log("Received values of form:", values);
+  const handleWingClick = () => {
+    showWings(true);
+  };
+
+  const handleWingSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch(
-        `/api/project/update-project/${projectFormData._id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const res = await fetch(`/api/project/create-wing/${projectId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(wingFormData),
+      });
       const data = await res.json();
-      if (data.success === false) {
-        dispatch(updateUserFailure(data));
+      if (data.success == false) {
+        console.log("Backend error");
         return;
       }
-      dispatch(updateUserSuccess(data));
-      setUpdateSuccess(true);
+      console.log(data);
+      showWings(false);
     } catch (error) {
-      dispatch(updateUserFailure(error));
+      console.log(error);
     }
   };
 
+  const handleWingChange = (e) => {
+    setWingFormData({ ...wingFormData, [e.target.id]: e.target.value });
+  };
+
   return (
-    <div className="max-w-6xl mx-auto mt-7">
-      {console.log(createdProjects)}
-      <h1 className="text-xl font-medium text-center">
-        {projectFormData.name}
-      </h1>
-      <Form
-        onFinish={onFinish}
-        className="max-w-6xl mx-auto p-3 mt-7 bg-custom-white rounded-lg shadow shadow-custom-gray"
-      >
-        <h3 className="font-medium text-lg ml-5">Add wings</h3>
-        <Form.List name="wingDetails">
-          {(fields, { add, remove }) => (
-            <>
-              {fields.map(({ key, name, ...restField }) => (
-                <Space
-                  key={key}
-                  style={{
-                    display: "flex",
-                    marginBottom: 3,
-                  }}
-                  align="baseline"
-                >
-                  <Form.Item
-                    {...restField}
-                    name={[name, "wingName"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Missing wing name",
-                      },
-                    ]}
-                    className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2 border-0"
-                  >
-                    <Input placeholder="Wing name" />
-                  </Form.Item>
-                  <Form.Item
-                    {...restField}
-                    name={[name, "numFloors"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Missing number of floors",
-                      },
-                    ]}
-                  >
-                    <Input placeholder="Number of floors" />
-                  </Form.Item>
-                  <Form.Item
-                    {...restField}
-                    name={[name, "flatsPerFloor"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Missing last name",
-                      },
-                    ]}
-                  >
-                    <Input placeholder="Flats per floor" />
-                  </Form.Item>
-                  <MinusCircleOutlined onClick={() => remove(name)} />
-                </Space>
-              ))}
-              <Form.Item>
-                <Button
-                  type="dashed"
-                  onClick={() => add()}
-                  block
-                  icon={<PlusOutlined />}
-                >
-                  Add field
-                </Button>
-              </Form.Item>
-            </>
-          )}
-        </Form.List>
-        <Form.Item>
-          <Button
-            htmlType="submit"
-            className="bg-custom-dark-blue mt-3 text-white p-3 rounded-full uppercase hover:opacity-95 disabled:opacity-80"
+    <>
+      <div className="flex justify-between items-center max-w-6xl mx-auto p-3 mt-7 bg-custom-white rounded-lg shadow shadow-custom-gray">
+        <h1 className="text-xl font-medium ml-5">{projectName}</h1>
+      </div>
+      <div className="flex justify-between items-center max-w-6xl mx-auto py-3 mt-7 bg-custom-white rounded-lg shadow shadow-custom-gray">
+        <button
+          onClick={handleWingClick}
+          className="bg-custom-dark-blue text-white py-2 px-3 ml-5 rounded-full hover:opacity-95 disabled:opacity-80"
+        >
+          Add wing
+        </button>
+        <button className="bg-custom-dark-blue text-white py-2 px-3 mr-5 rounded-full hover:opacity-95 disabled:opacity-80">
+          Assign members
+        </button>
+      </div>
+      {wings == true && (
+        <div className="max-w-6xl mx-auto p-3 mt-7 bg-custom-white rounded-lg shadow shadow-custom-gray">
+          <h3 className="font-medium text-lg ml-5">Create new wing</h3>
+          <form
+            onSubmit={handleWingSubmit}
+            className="flex flex-col gap-4 mt-4"
           >
-            Save
-          </Button>
-        </Form.Item>
-      </Form>{" "}
-      {/* Close the Form component here */}
-    </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="form-field">
+                <label htmlFor="wingName" className="text-sm ml-5">
+                  Wing name
+                </label>
+                <input
+                  type="text"
+                  id="wingName"
+                  className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                  onChange={handleWingChange}
+                />
+              </div>
+
+              <div className="form-field">
+                <label htmlFor="numberOfFloors" className="text-sm ml-5">
+                  Number of floors
+                </label>
+                <input
+                  type="text"
+                  id="numberOfFloors"
+                  className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                  onChange={handleWingChange}
+                />
+              </div>
+            </div>
+
+            <button className="bg-custom-dark-blue mt-3 text-white p-3 rounded-full uppercase hover:opacity-95 disabled:opacity-80">
+              Save
+            </button>
+          </form>
+        </div>
+      )}
+    </>
   );
 }
