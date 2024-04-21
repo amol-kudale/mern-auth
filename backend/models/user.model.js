@@ -86,8 +86,12 @@ const projectSchema = new mongoose.Schema({
   description: {
     type: String,
   },
+  wingDetails: {
+    type: Array,
+    default: [],
+  },
   teamMembers: {
-    type: [teamUserSchema], // Define team members as an array of teamMemberSchema
+    type: [teamUserSchema],
     default: [],
   },
 });

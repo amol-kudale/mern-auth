@@ -4,7 +4,7 @@ import { errorHandler } from "../utils/error.js";
 import jwt from "jsonwebtoken";
 import twilio from "twilio";
 
-const client = twilio(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
+// const client = twilio(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
 
 export const signup = async (req, res, next) => {
   const { username, email, password } = req.body;

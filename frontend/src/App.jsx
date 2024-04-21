@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import PrivateRoute from "./components/PrivateRoute";
 import Profile from "./pages/Profile";
 import LoginPage from "./pages/LoginPage";
+import NewProject from "./pages/NewProject";
 
 export default function App() {
   return (
@@ -19,7 +20,7 @@ export default function App() {
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile></Profile>}></Route>
         </Route>
-        <Route path="/otp-verify" element={<LoginPage></LoginPage>}></Route>
+        <Route path="/new-project" element={<NewProject></NewProject>}></Route>
       </Routes>
     </BrowserRouter>
     // <LoginPage></LoginPage>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
@@ -9,6 +10,7 @@ function Home() {
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
+  const navigate = useNavigate();
 
   const [projects, showProjects] = useState(false);
   const [projectFormData, setProjectFormData] = useState({});
@@ -27,7 +29,6 @@ function Home() {
 
   const handleProjectChange = (e) => {
     setProjectFormData({ ...projectFormData, [e.target.id]: e.target.value });
-    console.log(projectFormData);
   };
 
   const handleProjectSubmit = async (e) => {
@@ -35,22 +36,27 @@ function Home() {
     try {
       setProjectLoading(true);
       setProjectError(false);
-      const res = await fetch(`/api/user/create-project/${currentUser._id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(projectFormData),
-      });
+      const res = await fetch(
+        `/api/project/create-project/${currentUser._id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(projectFormData),
+        }
+      );
       const data = await res.json();
       setProjectLoading(false);
       if (data.success == false) {
         setProjectError(true);
         return;
       }
+      console.log(projectFormData);
       showProjects(false);
-      navigate("/");
+      navigate("/new-project", { state: { projectFormData } });
     } catch (error) {
+      console.log(error);
       setProjectLoading(false);
       setProjectError(true);
     }

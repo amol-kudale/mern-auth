@@ -57,6 +57,11 @@ export default function Profile() {
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <img
+          src={currentUser.profilePicture}
+          alt="profile"
+          className="h-24 w-24 self-center cursor-pointer rounded-full object-cover mt-2 mb-2"
+        />
         <div className="form-field flex items-center gap-4 bg-slate-100 rounded-full">
           <FontAwesomeIcon icon={faUser} className="text-gray-500 ml-4" />
           <input
