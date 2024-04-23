@@ -1,7 +1,7 @@
 import { User, Project, Wing } from "../models/user.model.js";
 
 export const createProject = async (req, res, next) => {
-  const { name, type, address, city, description } = req.body;
+  const { name, type, address, city, state, description } = req.body;
   const userId = req.params.id;
 
   try {
@@ -11,6 +11,7 @@ export const createProject = async (req, res, next) => {
       type: type,
       address: address,
       city: city,
+      state: state,
       description: description,
     });
 
@@ -38,13 +39,14 @@ export const createProject = async (req, res, next) => {
 };
 
 export const createWing = async (req, res, next) => {
-  const { wingName, numberOfFloors } = req.body;
+  const { wingName, numberOfFloors, flatsPerFloor } = req.body;
   const projectId = req.params.id;
 
   try {
     const newWing = new Wing({
       wingName,
       numberOfFloors,
+      flatsPerFloor,
     });
 
     await newWing.save();

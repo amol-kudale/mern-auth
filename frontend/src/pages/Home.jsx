@@ -290,7 +290,7 @@ function Home() {
                 <input
                   type="text"
                   id="name"
-                  className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                  className="bg-white rounded-full w-full p-3 pl-5 mt-2 shadow shadow-custom-blue"
                   onChange={handleProjectChange}
                 />
               </div>
@@ -302,12 +302,12 @@ function Home() {
                 <input
                   type="text"
                   id="type"
-                  className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                  className="bg-white rounded-full w-full p-3 pl-5 mt-2 shadow shadow-custom-blue"
                   onChange={handleProjectChange}
                 />
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-3">
               <div className="form-field">
                 <label htmlFor="address" className="text-sm ml-5">
                   Address
@@ -315,7 +315,7 @@ function Home() {
                 <input
                   type="text"
                   id="address"
-                  className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                  className="bg-white rounded-full w-full p-3 pl-5 mt-2 shadow shadow-custom-blue"
                   onChange={handleProjectChange}
                 />
               </div>
@@ -326,7 +326,18 @@ function Home() {
                 <input
                   type="text"
                   id="city"
-                  className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                  className="bg-white rounded-full w-full p-3 pl-5 mt-2 shadow shadow-custom-blue"
+                  onChange={handleProjectChange}
+                />
+              </div>
+              <div className="form-field">
+                <label htmlFor="state" className="text-sm ml-5">
+                  State
+                </label>
+                <input
+                  type="text"
+                  id="state"
+                  className="bg-white rounded-full w-full p-3 pl-5 mt-2 shadow shadow-custom-blue"
                   onChange={handleProjectChange}
                 />
               </div>
@@ -338,7 +349,7 @@ function Home() {
               <textarea
                 type="text"
                 id="description"
-                className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                className="bg-white rounded-full w-full p-3 pl-5 mt-2 shadow shadow-custom-blue"
                 onChange={handleProjectChange}
               />
             </div>

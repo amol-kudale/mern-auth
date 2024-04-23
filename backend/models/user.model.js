@@ -83,6 +83,10 @@ const projectSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  state: {
+    type: String,
+    required: true,
+  },
   description: {
     type: String,
   },
@@ -104,6 +108,10 @@ const wingSchema = new mongoose.Schema({
     required: true,
   },
   numberOfFloors: {
+    type: Number,
+    required: true,
+  },
+  flatsPerFloor: {
     type: Number,
     required: true,
   },

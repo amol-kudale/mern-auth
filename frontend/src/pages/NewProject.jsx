@@ -68,7 +68,7 @@ export default function NewProject() {
             onSubmit={handleWingSubmit}
             className="flex flex-col gap-4 mt-4"
           >
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-3">
               <div className="form-field">
                 <label htmlFor="wingName" className="text-sm ml-5">
                   Wing name
@@ -88,6 +88,18 @@ export default function NewProject() {
                 <input
                   type="text"
                   id="numberOfFloors"
+                  className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                  onChange={handleWingChange}
+                />
+              </div>
+
+              <div className="form-field">
+                <label htmlFor="flatsPerFloor" className="text-sm ml-5">
+                  Flats per floor
+                </label>
+                <input
+                  type="text"
+                  id="flatsPerFloor"
                   className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
                   onChange={handleWingChange}
                 />
