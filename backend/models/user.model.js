@@ -115,6 +115,12 @@ const wingSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  createdFloors: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Floor",
+    },
+  ],
 });
 
 const flatSchema = new mongoose.Schema({
@@ -127,6 +133,21 @@ const flatSchema = new mongoose.Schema({
     enum: ["available", "booked", "blocked", "held"],
     default: "available",
   },
+  bhk: {
+    type: Number,
+    required: true,
+  },
+  area: {
+    type: Number,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  addInfo: {
+    type: String,
+  },
 });
 
 const floorSchema = new mongoose.Schema({
@@ -134,7 +155,11 @@ const floorSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  flats: {
+  numberOfFlats: {
+    type: Number,
+    required: true,
+  },
+  createdFlats: {
     type: [flatSchema], // Define flats as an array of flatSchema
     default: [],
   },

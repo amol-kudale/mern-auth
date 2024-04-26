@@ -6,8 +6,15 @@ import PrivateRoute from "./components/PrivateRoute";
 import Profile from "./pages/Profile";
 import LoginPage from "./pages/LoginPage";
 import NewProject from "./pages/NewProject";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { cleanProjectsArray } from "./redux/project/projectSlice";
 
 export default function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(cleanProjectsArray());
+  }, [dispatch]);
   return (
     <BrowserRouter>
       <Header />

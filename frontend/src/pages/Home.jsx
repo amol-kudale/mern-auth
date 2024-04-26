@@ -57,7 +57,6 @@ function Home() {
         dispatch(createProjectFailure(data)); // Dispatch failure action with error
         return;
       }
-      console.log(data);
       dispatch(createProjectSuccess(data)); // Dispatch success action with project data
       showProjects(false);
       navigate("/new-project");

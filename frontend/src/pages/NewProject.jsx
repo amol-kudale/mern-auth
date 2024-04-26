@@ -1,19 +1,20 @@
-import React, { useState } from "react";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Space } from "antd";
-import { useSelector } from "react-redux";
-
-// window.onload = () => {
-//   hydrateStore();
-// };
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addFloorsToWing,
+  addWingToProject,
+} from "../redux/project/projectSlice";
 
 export default function NewProject() {
+  const dispatch = useDispatch();
   const { projects } = useSelector((state) => state.project);
-  const projectName = projects[projects.length - 1].name;
-  const projectId = projects[projects.length - 1]._id;
+  const currentProject = projects[projects.length - 1];
+  const projectId = currentProject._id;
 
   const [wings, showWings] = useState(false);
   const [wingFormData, setWingFormData] = useState({});
+  const [flats, showFlats] = useState(false);
+  const [flatsData, setFlatsData] = useState([]); // State to hold flats information
 
   const handleWingClick = () => {
     showWings(true);
@@ -35,7 +36,21 @@ export default function NewProject() {
         return;
       }
       console.log(data);
+      const wingId = data.currentWing._id;
+      dispatch(addWingToProject({ projectId: projectId, wingId: wingId }));
+      // Generate forms for each floor based on the response
+      const { numberOfFloors, flatsPerFloor, createdFloors } = data.currentWing;
+      const floorsData = Array.from({ length: numberOfFloors }, (_, index) => ({
+        floorId: createdFloors[index],
+        flats: Array.from({ length: flatsPerFloor }, () => ({
+          flatNumber: "",
+          status: "available",
+          addInfo: "",
+        })),
+      }));
+      setFlatsData(floorsData);
       showWings(false);
+      showFlats(true);
     } catch (error) {
       console.log(error);
     }
@@ -45,10 +60,42 @@ export default function NewProject() {
     setWingFormData({ ...wingFormData, [e.target.id]: e.target.value });
   };
 
+  const handleFlatChange = (floorIndex, flatIndex, field, value) => {
+    const updatedFlatsData = [...flatsData];
+    updatedFlatsData[floorIndex].flats[flatIndex][field] = value;
+    setFlatsData(updatedFlatsData);
+  };
+
+  const handleFloorSubmit = async (floorIndex) => {
+    const floorData = flatsData[floorIndex];
+    try {
+      const res = await fetch(
+        `/api/project/create-floor/${floorData.floorId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(floorData),
+        }
+      );
+      const data = await res.json();
+      if (data.success == false) {
+        console.log("Error submitting floor:", data.message);
+        return;
+      }
+      console.log("Floor submitted successfully:", data);
+    } catch (error) {
+      console.error("Error submitting floor:", error);
+    }
+  };
+
   return (
     <>
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3 mt-7 bg-custom-white rounded-lg shadow shadow-custom-gray">
-        <h1 className="text-xl font-medium ml-5">{projectName}</h1>
+        <h1 className="text-xl font-medium ml-5">
+          {currentProject.name}, {currentProject.address}, {currentProject.city}
+        </h1>
       </div>
       <div className="flex justify-between items-center max-w-6xl mx-auto py-3 mt-7 bg-custom-white rounded-lg shadow shadow-custom-gray">
         <button
@@ -64,10 +111,8 @@ export default function NewProject() {
       {wings == true && (
         <div className="max-w-6xl mx-auto p-3 mt-7 bg-custom-white rounded-lg shadow shadow-custom-gray">
           <h3 className="font-medium text-lg ml-5">Create new wing</h3>
-          <form
-            onSubmit={handleWingSubmit}
-            className="flex flex-col gap-4 mt-4"
-          >
+          <hr className="max-w-6xl mx-auto p-3 mt-3 mx-3"></hr>
+          <form onSubmit={handleWingSubmit} className="flex flex-col gap-4">
             <div className="grid grid-cols-3 gap-3">
               <div className="form-field">
                 <label htmlFor="wingName" className="text-sm ml-5">
@@ -110,6 +155,153 @@ export default function NewProject() {
               Save
             </button>
           </form>
+        </div>
+      )}
+
+      {flats == true && (
+        <div className="max-w-6xl mx-auto p-3 mt-7 bg-custom-white rounded-lg shadow shadow-custom-gray">
+          <h3 className="font-medium text-lg ml-5">
+            Wing - {wingFormData.wingName}
+          </h3>
+          <hr className="max-w-6xl mx-auto p-3 mt-3 mx-3"></hr>
+          {flatsData.map((floor, floorIndex) => (
+            <div key={floor.floorId} className="mb-8">
+              <h2 className="ml-5 font-medium">Floor {floorIndex + 1}</h2>
+              <hr className="max-w-6xl mx-auto mt-3 mx-3"></hr>
+
+              {floor.flats.map((flat, flatIndex) => (
+                <div
+                  key={`${floorIndex}-${flatIndex}`}
+                  className="grid grid-cols-3 gap-3 mt-7"
+                >
+                  <div className="form-field">
+                    <label htmlFor="flatNumber" className="text-sm ml-5">
+                      Flat Number
+                    </label>
+                    <input
+                      type="text"
+                      value={flat.flatNumber}
+                      onChange={(e) =>
+                        handleFlatChange(
+                          floorIndex,
+                          flatIndex,
+                          "flatNumber",
+                          e.target.value
+                        )
+                      }
+                      className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                    />
+                  </div>
+
+                  <div className="form-field">
+                    <label htmlFor="status" className="text-sm ml-5">
+                      Booking Status
+                    </label>
+                    <select
+                      value={flat.status}
+                      onChange={(e) =>
+                        handleFlatChange(
+                          floorIndex,
+                          flatIndex,
+                          "status",
+                          e.target.value
+                        )
+                      }
+                      className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                    >
+                      <option value="available">Available</option>
+                      <option value="booked">Booked</option>
+                      <option value="blocked">Blocked</option>
+                      <option value="held">Held</option>
+                    </select>
+                  </div>
+
+                  <div className="form-field">
+                    <label htmlFor="bhk" className="text-sm ml-5">
+                      BHK
+                    </label>
+                    <input
+                      type="number"
+                      value={flat.bhk}
+                      onChange={(e) =>
+                        handleFlatChange(
+                          floorIndex,
+                          flatIndex,
+                          "bhk",
+                          e.target.value
+                        )
+                      }
+                      className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                    />
+                  </div>
+
+                  <div className="form-field">
+                    <label htmlFor="area" className="text-sm ml-5">
+                      Area (sqft)
+                    </label>
+                    <input
+                      type="number"
+                      value={flat.area}
+                      onChange={(e) =>
+                        handleFlatChange(
+                          floorIndex,
+                          flatIndex,
+                          "area",
+                          e.target.value
+                        )
+                      }
+                      className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                    />
+                  </div>
+
+                  <div className="form-field">
+                    <label htmlFor="price" className="text-sm ml-5">
+                      Price
+                    </label>
+                    <input
+                      type="number"
+                      value={flat.price}
+                      onChange={(e) =>
+                        handleFlatChange(
+                          floorIndex,
+                          flatIndex,
+                          "price",
+                          e.target.value
+                        )
+                      }
+                      className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                    />
+                  </div>
+
+                  <div className="form-field">
+                    <label htmlFor="addInfo" className="text-sm ml-5">
+                      Additional Info
+                    </label>
+                    <input
+                      type="text"
+                      value={flat.addInfo}
+                      onChange={(e) =>
+                        handleFlatChange(
+                          floorIndex,
+                          flatIndex,
+                          "addInfo",
+                          e.target.value
+                        )
+                      }
+                      className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                    />
+                  </div>
+                  <br></br>
+                </div>
+              ))}
+              <button
+                onClick={() => handleFloorSubmit(floorIndex)}
+                className="bg-custom-dark-blue mt-5 text-white p-3 rounded-full uppercase hover:opacity-95 disabled:opacity-80"
+              >
+                Add Floor
+              </button>
+            </div>
+          ))}
         </div>
       )}
     </>
