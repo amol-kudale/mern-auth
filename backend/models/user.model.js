@@ -63,6 +63,10 @@ const teamUserSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  password: {
+    type: String,
+    default: "",
+  },
 });
 
 const projectSchema = new mongoose.Schema({

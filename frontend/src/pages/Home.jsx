@@ -31,6 +31,7 @@ function Home() {
   const [sendOTP, setSendOTP] = useState(false);
 
   const handleProjectClick = () => {
+    showTeam(false);
     showProjects(true);
   };
 
@@ -67,6 +68,7 @@ function Home() {
   };
 
   const handleMemberClick = () => {
+    showProjects(false);
     showTeam(true);
   };
 
@@ -371,7 +373,7 @@ function Home() {
                 <input
                   type="text"
                   id="name"
-                  className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                  className="bg-white rounded-full w-full p-3 pl-5 mt-2 shadow shadow-custom-blue"
                   onChange={handleMemberChange}
                 />
               </div>
@@ -383,7 +385,7 @@ function Home() {
                 <input
                   type="text"
                   id="role"
-                  className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                  className="bg-white rounded-full w-full p-3 pl-5 mt-2 shadow shadow-custom-blue"
                   onChange={handleMemberChange}
                 />
               </div>
@@ -397,7 +399,7 @@ function Home() {
                 <input
                   type="text"
                   id="mobileNumber"
-                  className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                  className="bg-white rounded-full w-full p-3 pl-5 mt-2 shadow shadow-custom-blue"
                   onChange={handleMemberChange}
                 />
               </div>
@@ -409,7 +411,7 @@ function Home() {
                 <input
                   type="email"
                   id="email"
-                  className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                  className="bg-white rounded-full w-full p-3 pl-5 mt-2 shadow shadow-custom-blue"
                   onChange={handleMemberChange}
                 />
               </div>
@@ -426,7 +428,7 @@ function Home() {
                     <input
                       type="number"
                       id="otp"
-                      className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                      className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2 shadow shadow-custom-blue"
                       onChange={handleMemberChange}
                     />
                     <button className="bg-custom-dark-blue mt-3 text-white p-3 max-w-40 rounded-full uppercase hover:opacity-95 disabled:opacity-80">

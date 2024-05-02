@@ -121,7 +121,7 @@ export default function NewProject() {
                 <input
                   type="text"
                   id="wingName"
-                  className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                  className="bg-white rounded-full w-full p-3 pl-5 mt-2 shadow shadow-custom-blue"
                   onChange={handleWingChange}
                 />
               </div>
@@ -133,7 +133,7 @@ export default function NewProject() {
                 <input
                   type="text"
                   id="numberOfFloors"
-                  className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                  className="bg-white rounded-full w-full p-3 pl-5 mt-2 shadow shadow-custom-blue"
                   onChange={handleWingChange}
                 />
               </div>
@@ -145,7 +145,7 @@ export default function NewProject() {
                 <input
                   type="text"
                   id="flatsPerFloor"
-                  className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                  className="bg-white rounded-full w-full p-3 pl-5 mt-2 shadow shadow-custom-blue"
                   onChange={handleWingChange}
                 />
               </div>
@@ -189,7 +189,7 @@ export default function NewProject() {
                           e.target.value
                         )
                       }
-                      className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                      className="bg-white rounded-full w-full p-3 pl-5 mt-2 shadow shadow-custom-blue"
                     />
                   </div>
 
@@ -207,7 +207,7 @@ export default function NewProject() {
                           e.target.value
                         )
                       }
-                      className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                      className="bg-white rounded-full w-full p-3 pl-5 mt-2 shadow shadow-custom-blue"
                     >
                       <option value="available">Available</option>
                       <option value="booked">Booked</option>
@@ -231,7 +231,7 @@ export default function NewProject() {
                           e.target.value
                         )
                       }
-                      className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                      className="bg-white rounded-full w-full p-3 pl-5 mt-2 shadow shadow-custom-blue"
                     />
                   </div>
 
@@ -250,7 +250,7 @@ export default function NewProject() {
                           e.target.value
                         )
                       }
-                      className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                      className="bg-white rounded-full w-full p-3 pl-5 mt-2 shadow shadow-custom-blue"
                     />
                   </div>
 
@@ -269,7 +269,7 @@ export default function NewProject() {
                           e.target.value
                         )
                       }
-                      className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                      className="bg-white rounded-full w-full p-3 pl-5 mt-2 shadow shadow-custom-blue"
                     />
                   </div>
 
@@ -288,7 +288,7 @@ export default function NewProject() {
                           e.target.value
                         )
                       }
-                      className="bg-slate-100 rounded-full w-full p-3 pl-5 mt-2"
+                      className="bg-white rounded-full w-full p-3 pl-5 mt-2 shadow shadow-custom-blue"
                     />
                   </div>
                   <br></br>
