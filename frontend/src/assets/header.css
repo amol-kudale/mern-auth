@@ -1,0 +1,15 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.header{
+    /* border: 3px solid red; */
+    background: black;
+    color: white;
+    padding: 0rem 2rem;
+    position: sticky;
+    top: 0;
+}

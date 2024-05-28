@@ -1,0 +1,27 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.profile-image{
+    /* border: 3px solid blue; */
+    height: 100px;
+    width: 100px;
+}
+.profile-box{
+    /* border: 3px solid red; */
+    /* width: 60%; */
+    /* display: flex; */
+    /* height: 100%; */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+.profile-box form{
+    /* border: 3px solid green; */
+    width: 40%;
+    display: flex;
+    align-items: center;
+}
