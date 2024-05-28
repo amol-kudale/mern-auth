@@ -1,22 +1,22 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import '../assets/header.css'
- 
+import "../assets/header.css";
+
 function Header() {
   const { currentUser } = useSelector((state) => state.user);
   return (
-    <div className="header ">
-      <div className=" flex justify-between items-center  mx-auto p-3">
+    <div className="header">
+      <div className="flex justify-between items-center mx-auto p-3">
         <Link to="/">
           <h1 className="font-bold uppercase text-xl hover:text-custom-dark-blue">
             Tracify
           </h1>
         </Link>
         <ul className="flex gap-12 items-center">
-          {/* <Link to="/about">
+          <Link to="/about">
             <li>About</li>
-          </Link> */}
+          </Link>
           <Link to="/profile">
             {currentUser ? (
               <img
@@ -28,8 +28,11 @@ function Header() {
               <li>Sign In</li>
             )}
           </Link>
-          
-          {currentUser ? currentUser.username.charAt(0).toUpperCase() + currentUser.username.slice(1).toLowerCase() : "Guest"}
+
+          {currentUser
+            ? currentUser.username.charAt(0).toUpperCase() +
+              currentUser.username.slice(1).toLowerCase()
+            : "Guest"}
         </ul>
       </div>
     </div>

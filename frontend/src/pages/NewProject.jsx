@@ -212,7 +212,7 @@ export default function NewProject() {
                       <option value="available">Available</option>
                       <option value="booked">Booked</option>
                       <option value="blocked">Blocked</option>
-                      <option value="held">Held</option>
+                      <option value="held">Hold</option>
                     </select>
                   </div>
 
