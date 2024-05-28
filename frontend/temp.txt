@@ -1,0 +1,41 @@
+// /** @type {import('tailwindcss').Config} */
+// module.exports = {
+//   content: [
+//     "./src/**/*.{html,js}",
+//     "./node_modules/tw-elements/js/**/*.js"
+//   ],  
+//   theme: {
+//     extend: {
+//       colors: {
+//         "custom-blue": "#007bff",
+//         "custom-dark-blue": "#0056b3",
+//         "custom-gray": "#7d7c7c",
+//         "custom-white": "#f9f8f8",
+//       },
+//     },
+//   },
+//   plugins: [require("tw-elements/plugin.cjs")],
+  
+// };
+
+
+// const withMT = require("@material-tailwind/react/utils/withMT");
+ 
+// module.exports = withMT({
+//   content: [    
+//       "./src/**/*.{html,js}",
+//   ],
+//   theme: {
+//     extend: {
+//       colors: {
+//         "custom-blue": "#007bff",
+//         "custom-dark-blue": "#0056b3",
+//         "custom-gray": "#7d7c7c",
+//         "custom-white": "#f9f8f8",
+//       },
+//     },
+//   },
+//   plugins: [],
+// });
+
+

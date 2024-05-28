@@ -5,11 +5,13 @@ import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
 import projectRoutes from "./routes/project.route.js";
 import cookieParser from "cookie-parser";
+import { TeamUser } from "./models/user.model.js";
+import teamMemberRoutes from "./routes/teamMember.route.js"
 
 dotenv.config();
 
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect("mongodb+srv://aaryang0605:12343000@tracify.bwaowhq.mongodb.net/tracify?retryWrites=true&w=majority&appName=Tracify")
   .then(() => {
     console.log("MongoDB connection successful.");
   })
@@ -30,6 +32,8 @@ app.listen(3000, () => {
 app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/project", projectRoutes);
+app.use("/api/teamuser", teamMemberRoutes);
+
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;

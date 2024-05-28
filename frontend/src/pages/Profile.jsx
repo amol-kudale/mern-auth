@@ -9,6 +9,9 @@ import {
 } from "../redux/user/userSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
+import "../assets/elements.css"
+import "../assets/profile.css"
+
 
 export default function Profile() {
   const dispatch = useDispatch();
@@ -54,15 +57,15 @@ export default function Profile() {
   };
 
   return (
-    <div className="p-3 max-w-lg mx-auto">
+    <div className="profile-box p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className=" flex flex-col gap-4">
         <img
           src={currentUser.profilePicture}
           alt="profile"
-          className="h-24 w-24 self-center cursor-pointer rounded-full object-cover mt-2 mb-2"
+          className="profile-image h-24 w-24 self-center cursor-pointer rounded-full object-cover mt-2 mb-2"
         />
-        <div className="form-field flex items-center gap-4 bg-slate-100 rounded-full">
+        <div className="  form-field flex items-center gap-4 bg-slate-100 rounded-full">
           <FontAwesomeIcon icon={faUser} className="text-gray-500 ml-4" />
           <input
             defaultValue={currentUser.username}
@@ -95,20 +98,20 @@ export default function Profile() {
             onChange={handleChange}
           />
         </div>
-        <button className="bg-slate-700 mt-3 text-white p-3 rounded-full uppercase hover:opacity-95 disabled:opacity-80">
+        <button className=" w-full btn-primary bg-slate-700 mt-3 text-white p-3 rounded-full uppercase hover:opacity-95 disabled:opacity-80">
           {loading ? "Loading..." : "Update"}
         </button>
+        <button
+          onClick={handleSignOut}
+          className="btn-primary w-full mt-5 bg-red-700 text-white p-3 rounded-full uppercase hover:opacity-95 disabled:opacity-80"
+        >
+          Sign out
+        </button>
+        <p className="text-red-700 mt-5">{error && "Something went wrong!"}</p>
+        <p className="text-green-700 mt-5">
+          {updateSuccess && "User is updated successfully!"}
+        </p>
       </form>
-      <button
-        onClick={handleSignOut}
-        className="w-full mt-5 bg-red-700 text-white p-3 rounded-full uppercase hover:opacity-95 disabled:opacity-80"
-      >
-        Sign out
-      </button>
-      <p className="text-red-700 mt-5">{error && "Something went wrong!"}</p>
-      <p className="text-green-700 mt-5">
-        {updateSuccess && "User is updated successfully!"}
-      </p>
     </div>
   );
 }

@@ -36,33 +36,37 @@ const teamUserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  role: {
+    type: String,
+    required: true,
+  },
+  contact: {
+    type: Number,
+    required: true,
+    unique: true,
+  },
   email: {
     type: String,
     required: true,
     unique: true,
   },
-  role: {
+  userId: {
     type: String,
-    required: true,
+    default: "",
   },
-  mobileNumber: {
-    type: Number,
-    required: true,
-    unique: true,
-  },
-  otp: {
-    type: Number,
-    require: true,
-  },
-  otpExpiration: {
-    type: Date,
+  // otp: {
+  //   type: Number,
+  //   require: true,
+  // },
+  // otpExpiration: {
+  //   type: Date,
 
-    default: () => new Date(new Date().getTime() + 5 * 60 * 1000),
-  },
-  verified: {
-    type: Boolean,
-    default: false,
-  },
+    // default: () => new Date(new Date().getTime() + 5 * 60 * 1000),
+  // },
+  // verified: {
+  //   type: Boolean,
+  //   default: false,
+  // },
   password: {
     type: String,
     default: "",
@@ -94,6 +98,10 @@ const projectSchema = new mongoose.Schema({
   description: {
     type: String,
   },
+  userId: {
+    type: String,
+    default: "",
+  },
   createdWings: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -101,7 +109,7 @@ const projectSchema = new mongoose.Schema({
     },
   ],
   teamMembers: {
-    type: [teamUserSchema],
+    type: [{type: mongoose.Schema.Types.ObjectId, ref:'TeamUser'}],
     default: [],
   },
 });
@@ -175,7 +183,7 @@ const floorSchema = new mongoose.Schema({
 //     type: mongoose.Schema.Types.ObjectId,
 //     ref: "Project",
 //     required: true,
-//   },
+//   }, 
 //   teamMember: {
 //     type: mongoose.Schema.Types.ObjectId,
 //     ref: "TeamMember",
@@ -185,7 +193,7 @@ const floorSchema = new mongoose.Schema({
 
 // Create models based on the schemas
 const User = mongoose.model("User", userSchema);
-const TeamUser = mongoose.model("TeamMember", teamUserSchema);
+const TeamUser = mongoose.model("Teammember", teamUserSchema);
 const Project = mongoose.model("Project", projectSchema);
 const Wing = mongoose.model("Wing", wingSchema);
 const Floor = mongoose.model("Floor", floorSchema);

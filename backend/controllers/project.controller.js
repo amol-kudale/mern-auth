@@ -1,4 +1,4 @@
-import { User, Project, Wing, Floor, Flat } from "../models/user.model.js";
+import { User,TeamUser, Project, Wing, Floor, Flat } from "../models/user.model.js";
 
 export const createProject = async (req, res, next) => {
   const { name, type, address, city, state, description } = req.body;
@@ -13,6 +13,7 @@ export const createProject = async (req, res, next) => {
       city: city,
       state: state,
       description: description,
+      userId: userId,
     });
 
     // Save the project to the database
@@ -119,5 +120,69 @@ export const createFloor = async (req, res, next) => {
   } catch (error) {
     console.error("Error submitting floor:", error);
     next(error);
+  }
+};
+
+export const showProject = async (req, res, next) =>{
+
+  const {userId} = req.params;
+    let project = await Project.find({userId});
+    // let project = await Project.find();
+    if(project.length>0){
+      res.send(project)
+    }else{
+      res.send({result: "No Project found"})
+    }
+}
+
+
+
+export const getProjectById = async (req, res) => {
+  try {
+    // const {projectId} = req.params.projectId;
+    const project = await Project.findOne({_id:req.params.projectId})
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found' });
+    }
+    res.json(project);
+    
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+export const updateProject = async (req, res) => {
+  try {
+    const project = await Project.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found' });
+    }
+    res.json(project);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+export const allocateMembersToProject = async (req, res) => {
+  try {
+    const project = await Project.findOne({_id:req.params.projectId})
+    // const project = await Project.findById(req.params.id);
+    // console.log(project)
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found' });
+    }
+    
+    const {members} = req.body;
+   
+   
+    // project.teamMembers = TeamUser(members);
+    project.teamMembers = members
+    
+  
+    
+    await project.save();
+    res.json(project);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
   }
 };

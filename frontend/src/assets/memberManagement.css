@@ -1,0 +1,38 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.member-list-header{
+    padding: 1rem;
+    text-align: center;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.member-list-member-search{
+    border: none;
+    background: rgb(244, 244, 244);
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+}
+.member-list-table-body{
+    width: 100%;
+    text-align: center;
+    
+    
+}
+.member-list-table-body tr{
+    margin: 2rem 0;
+}
+
+.member-list-table-head{
+    /* border: 2px solid blue; */
+    background-color: #006dd6;
+    color: white;
+    margin-bottom: 1rem;
+    
+}
