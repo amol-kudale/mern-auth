@@ -54,6 +54,10 @@ const teamUserSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
+  assignedProjects: {
+    type: [{type: mongoose.Schema.Types.ObjectId, ref:'Project'}],
+    default: [],
+  },
   // otp: {
   //   type: Number,
   //   require: true,

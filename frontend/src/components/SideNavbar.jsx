@@ -1,7 +1,9 @@
 import React from "react";
-
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
 import { useSelector } from "react-redux";
+import { signOut } from "../redux/user/userSlice";
 import { Outlet, Navigate } from "react-router-dom";
 
 import {
@@ -38,6 +40,7 @@ import {
 } from "@heroicons/react/24/outline";
  
 export function SidebarWithBurgerMenu() {
+  const dispatch = useDispatch();
   const [open, setOpen] = React.useState(0);
   const [openAlert, setOpenAlert] = React.useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(true);
@@ -54,6 +57,15 @@ export function SidebarWithBurgerMenu() {
   // const closeDrawer = () => setIsDrawerOpen(false);
 
   const { currentUser } = useSelector((state) => state.user);
+
+  const handleSignOut = async () => {
+    try {
+      await fetch("api/auth/sign-out");
+      dispatch(signOut());
+    } catch (error) {
+      console.log(error);
+    }
+  };
  
   return (
     <>
@@ -252,7 +264,7 @@ export function SidebarWithBurgerMenu() {
                     </ListItemPrefix>
                     Settings
                   </ListItem>
-                  <ListItem>
+                  <ListItem onClick={handleSignOut}>
                     <ListItemPrefix>
                       <PowerIcon className="h-5 w-5" />
                     </ListItemPrefix>
