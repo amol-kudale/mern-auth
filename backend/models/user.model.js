@@ -54,27 +54,12 @@ const teamUserSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-  assignedProjects: {
-    type: [{type: mongoose.Schema.Types.ObjectId, ref:'Project'}],
-    default: [],
-  },
-  // otp: {
-  //   type: Number,
-  //   require: true,
-  // },
-  // otpExpiration: {
-  //   type: Date,
-
-    // default: () => new Date(new Date().getTime() + 5 * 60 * 1000),
-  // },
-  // verified: {
-  //   type: Boolean,
-  //   default: false,
-  // },
-  password: {
-    type: String,
-    default: "",
-  },
+  assignedProjects: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Project",
+    },
+  ],
 });
 
 const projectSchema = new mongoose.Schema({
@@ -113,7 +98,7 @@ const projectSchema = new mongoose.Schema({
     },
   ],
   teamMembers: {
-    type: [{type: mongoose.Schema.Types.ObjectId, ref:'TeamUser'}],
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: "TeamUser" }],
     default: [],
   },
 });
@@ -146,7 +131,7 @@ const flatSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["available", "booked", "blocked", "held"],
+    enum: ["available", "booked", "blocked", "hold"],
     default: "available",
   },
   bhk: {
@@ -180,20 +165,6 @@ const floorSchema = new mongoose.Schema({
     default: [],
   },
 });
-
-//schema for assignment (assigning project to team members)
-// const assignmentSchema = new mongoose.Schema({
-//   project: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: "Project",
-//     required: true,
-//   }, 
-//   teamMember: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: "TeamMember",
-//     required: true,
-//   },
-// });
 
 // Create models based on the schemas
 const User = mongoose.model("User", userSchema);
