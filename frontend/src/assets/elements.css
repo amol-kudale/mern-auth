@@ -10,6 +10,12 @@
         margin: 0.4rem 0;
         border-radius: 10px;
         color: white;
+}
 
-
+.btn-secondary{
+    border: 3px solid #3d536ec7;
+    padding: 0.5rem 1rem;
+    margin: 0.4rem 0;
+    border-radius: 100px;
+    
 }

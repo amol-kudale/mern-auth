@@ -189,3 +189,16 @@ export const allocateMembersToProject = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+
+export const getWingDetails = async (req, res) => {
+  try{
+    const wing = await Wing.findOne({_id:req.params.wingId})
+    if(!wing){
+      return res.status(404).json({message: 'Project wing not found'});
+    }
+    res.json(wing);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error' });
+  }
+} 
