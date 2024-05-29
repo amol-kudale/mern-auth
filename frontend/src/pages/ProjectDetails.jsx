@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams,  useNavigate } from 'react-router-dom';
 
+import '../assets/projectDetails.css'
+
+
 const ProjectDetails = () => {
   const {currentUser} = useSelector((state)=> state.user);
   const currentUserId = currentUser._id;
@@ -53,7 +56,7 @@ const ProjectDetails = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`/api/project/${projectId}`, {
+      const response = await fetch(`/api/project/project-details/${projectId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -103,42 +106,105 @@ const ProjectDetails = () => {
   if (loading) return <p>Loading project details...</p>;
   if (error) return <p>Error fetching project details: {error.message}</p>;
 
+
+  const filteredMembers = members.filter((member) =>
+    project.teamMembers.some((teamMember) => teamMember === member._id)
+  );
+  console.log(filteredMembers , "filtered members")
+
+
+
   return (
-    <div className="project-detail">
+    <div className="project-details">
       <h1>{project.name} </h1>
       <form
        onSubmit={handleUpdate}
        >
-        <input
-          type="text"
-          value={project.name}
-          onChange={(e) => setProject({ ...project, name: e.target.value })}
-        />
-        <textarea
-          value={project.description}
-          onChange={(e) =>
-            setProject({ ...project, description: e.target.value })
-          }
-        />
-        <button type="submit">Update Project</button>
+        <label htmlFor="">
+          Name
+          <input
+            type="text"
+            value={project.name}
+            onChange={(e) => setProject({ ...project, name: e.target.value })}
+          />
+        </label>
+        <label htmlFor="">
+          Type
+          <input
+            type="text"
+            value={project.type}
+            onChange={(e) => setProject({ ...project, type: e.target.value })}
+          />
+        </label>
+        <label htmlFor="">
+          Address
+          <input
+            type="text"
+            value={project.address}
+            onChange={(e) => setProject({ ...project, address: e.target.value })}
+          />
+        </label>
+        <label htmlFor="">
+          City
+          <input
+            type="text"
+            value={project.city}
+            onChange={(e) => setProject({ ...project, city: e.target.value })}
+          />
+        </label>
+        <label htmlFor="">
+          State
+          <input
+            type="text"
+            value={project.state}
+            onChange={(e) => setProject({ ...project, state: e.target.value })}
+          />
+        </label>
+        <label htmlFor="">
+          Description
+          <textarea
+            value={project.description}
+            onChange={(e) =>
+              setProject({ ...project, description: e.target.value })
+            }
+          />
+        </label>
+        <button className='btn-primary' onClick={handleUpdate} type="submit">Update Project</button>
       </form>
         <br />
-        <hr />
         <br />
-      <h2>Allocate Members</h2>
-      <div>
+      <h1>Allocated Members</h1>
+      <div className='allocated-members'>
+            
+            {
+              filteredMembers.map((member)=>(
+                <li  key={member._id}>
+                  {member.name}
+                </li>
+              ))
+            }
+      </div> 
+      <br /><br />
+      <div className='allocate-member-list' >
         {members.map((member) => (
-          <div key={member._id}>
+
+        
+        
+          
+          <div className='member-allocation' key={member._id}>
+          
             <input
               type="checkbox"
-              checked={selectedMembers.includes(member._id)}
               onChange={() => handleMemberSelection(member._id)}
+              checked={selectedMembers.includes(member._id)}
             />
             {member.name}
           </div>
-        ))}
-        <button onClick={handleAllocateMembers}>Allocate Members</button>
+        
+        )
+        )}
       </div>
+        <button className='btn-primary' onClick={handleAllocateMembers}>Allocate Members</button>
     </div>
   );
 };

@@ -78,7 +78,7 @@ const Home = () => {
             
           ))
         ) : (
-          <h4>Oops.. Something went wrong</h4>
+          <h1 className=' text-md absolute  inline-block'>Welcome, No projects are available.....</h1>
         )}
         <Link to='/create-project'>
           <div className='project-add-card'>

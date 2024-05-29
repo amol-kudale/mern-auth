@@ -5,6 +5,8 @@ import {
   addWingToProject,
 } from "../redux/project/projectSlice";
 
+import '../assets/projectDetails.css';
+
 export default function NewProject() {
   const dispatch = useDispatch();
   const { projects } = useSelector((state) => state.project);
@@ -12,12 +14,16 @@ export default function NewProject() {
   const projectId = currentProject._id;
 
   const [wings, showWings] = useState(false);
+  const [memberList, showMemberList] = useState(false);
   const [wingFormData, setWingFormData] = useState({});
   const [flats, showFlats] = useState(false);
   const [flatsData, setFlatsData] = useState([]); // State to hold flats information
 
   const handleWingClick = () => {
     showWings(true);
+  };
+  const handleAssignMemberClick = () => {
+    showMemberList(true);
   };
 
   const handleWingSubmit = async (e) => {
@@ -100,11 +106,13 @@ export default function NewProject() {
       <div className="flex justify-between items-center max-w-6xl mx-auto py-3 mt-7 bg-custom-white rounded-lg shadow shadow-custom-gray">
         <button
           onClick={handleWingClick}
-          className="bg-custom-dark-blue text-white py-2 px-3 ml-5 rounded-full hover:opacity-95 disabled:opacity-80"
+          className="btn-primary bg-custom-dark-blue text-white py-2 px-3 ml-5 rounded-full hover:opacity-95 disabled:opacity-80"
         >
           Add wing
         </button>
-        <button className="bg-custom-dark-blue text-white py-2 px-3 mr-5 rounded-full hover:opacity-95 disabled:opacity-80">
+        <button
+          onClick={handleAssignMemberClick}
+         className="btn-primary bg-custom-dark-blue text-white py-2 px-3 mr-5 rounded-full hover:opacity-95 disabled:opacity-80">
           Assign members
         </button>
       </div>
@@ -151,7 +159,7 @@ export default function NewProject() {
               </div>
             </div>
 
-            <button className="bg-custom-dark-blue mt-3 text-white p-3 rounded-full uppercase hover:opacity-95 disabled:opacity-80">
+            <button className="btn-primary bg-custom-dark-blue mt-3 text-white p-3 rounded-full uppercase hover:opacity-95 disabled:opacity-80">
               Save
             </button>
           </form>
@@ -296,14 +304,22 @@ export default function NewProject() {
               ))}
               <button
                 onClick={() => handleFloorSubmit(floorIndex)}
-                className="bg-custom-dark-blue mt-5 text-white p-3 rounded-full uppercase hover:opacity-95 disabled:opacity-80"
+                className="btn-primary bg-custom-dark-blue mt-5 text-white p-3 rounded-full uppercase hover:opacity-95 disabled:opacity-80"
               >
-                Add Floor
+                Submit Floor Data
               </button>
             </div>
           ))}
         </div>
       )}
+
+      {
+        memberList== true &&(
+          <div>
+            
+          </div>
+        )
+      }
     </>
   );
 }

@@ -21,7 +21,7 @@ router.get("/show-project/:userId", showProject);
 
 router.get('/project-details/:projectId', getProjectById);
 
-router.put('project-details/:projectId', updateProject);
+router.put('/project-details/:projectId', updateProject);
 
 router.post('/allocate-members/:projectId', allocateMembersToProject);
 
