@@ -12,9 +12,9 @@ function Header() {
           </h1>
         </Link>
         <ul className="flex gap-12 items-center">
-          <Link to="/about">
+          {/* <Link to="/about">
             <li>About</li>
-          </Link>
+          </Link> */}
           <Link to="/profile">
             {currentUser ? (
               <img

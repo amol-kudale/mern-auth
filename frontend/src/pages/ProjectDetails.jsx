@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { useParams,  useNavigate } from 'react-router-dom';
 
 import '../assets/projectDetails.css'
+import '../assets/elements.css';
 
 
 const ProjectDetails = () => {
@@ -17,11 +18,18 @@ const ProjectDetails = () => {
   const [error, setError] = useState(null);
   const [members, setMembers] = useState([]);
   const [selectedMembers, setSelectedMembers] = useState([]);
+  const [isMoreDetailsOpen, setMoreDetailsOpen] = useState(false)
+  const [selectedWing, setSelectedWing] = useState(null);
+
 
   useEffect(() => {
     fetchProject();
     fetchMembers();
   }, []);
+
+  const handleMoreDetailsToggle = () => {
+    setMoreDetailsOpen(prevState => !prevState)
+  }
 
   const fetchProject = async () => {
     try {
@@ -32,6 +40,9 @@ const ProjectDetails = () => {
       const result = await response.json();
       console.log("this is project details")
       setProject(result);
+      if (result.createdWings.length > 0) {
+        fetchWingDetails(result.createdWings[0]);
+      }
       console.warn(result)
     } catch (error) {
       setError(error);
@@ -39,6 +50,20 @@ const ProjectDetails = () => {
       setLoading(false);
     }
   };
+
+  const fetchWingDetails = async (wingId) => {
+    try {
+      const response = await fetch(`/api/project/wing/${wingId}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const result = await response.json();
+      setSelectedWing(result);
+    } catch (error) {
+      console.error('Error fetching wing details:', error);
+    }
+  };
+
 
   const fetchMembers = async () => {
     try {
@@ -171,6 +196,49 @@ const ProjectDetails = () => {
         </label>
         <button className='btn-primary' onClick={handleUpdate} type="submit">Update Project</button>
       </form>
+
+
+      <br /><br />
+
+      <button onClick={handleMoreDetailsToggle} className="btn-secondary">More Details ...</button>
+
+            {
+              isMoreDetailsOpen == true && (
+                <div>
+                    <h2>Total Created Wings: {project.createdWings.length}</h2>
+                    
+                    <h2>Total Team Members: {project.teamMembers.length}</h2>
+                    
+                    <br />
+                    <br />
+                    <h1>Created Wings</h1>
+                    <select className='border' onChange={(e) => fetchWingDetails(e.target.value)}>
+                      {project.createdWings.map((wing) => (
+                        <option key={wing} value={wing}>
+                          {wing}
+                        </option>
+                      ))}
+                    </select>
+                    {selectedWing && (
+                      <div className="wing-details">
+                        <h3 className='font-bold text-xl'>Wing Details</h3>
+                        <p >Wing Name: {selectedWing.wingName}</p>
+                        <p >Number of Floors: {selectedWing.numberOfFloors}</p>
+                        <p >Flats Per Floor: {selectedWing.flatsPerFloor}</p>
+                        {/* Add more wing details here */}
+                      </div>
+                    )}
+                  </div>
+                
+              )
+            }
+
+
+
+
+
+
+
         <br />
         <br />
       <h1>Allocated Members</h1>
