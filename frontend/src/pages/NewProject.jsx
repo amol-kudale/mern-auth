@@ -5,7 +5,7 @@ import {
   addWingToProject,
 } from "../redux/project/projectSlice";
 
-import '../assets/projectDetails.css';
+import "../assets/projectDetails.css";
 
 export default function NewProject() {
   const dispatch = useDispatch();
@@ -112,7 +112,8 @@ export default function NewProject() {
         </button>
         <button
           onClick={handleAssignMemberClick}
-         className="btn-primary bg-custom-dark-blue text-white py-2 px-3 mr-5 rounded-full hover:opacity-95 disabled:opacity-80">
+          className="btn-primary bg-custom-dark-blue text-white py-2 px-3 mr-5 rounded-full hover:opacity-95 disabled:opacity-80"
+        >
           Assign members
         </button>
       </div>
@@ -313,13 +314,7 @@ export default function NewProject() {
         </div>
       )}
 
-      {
-        memberList== true &&(
-          <div>
-            
-          </div>
-        )
-      }
+      {memberList == true && <div></div>}
     </>
   );
 }
