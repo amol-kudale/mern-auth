@@ -100,7 +100,7 @@ const ShowMember = () => {
                   <td>{item.role}</td>
                   <td>{item.contact}</td>
                   <td>{item.email}</td>
-                  <button onClick={() => deleteMember(item._id)} className=' text-xs btn-primary'>Delete</button>
+                  <button onClick={() => deleteMember(item._id)} className=' text-xs btn-third'>Delete</button>
                 </tr>
               ))
             ) : (
