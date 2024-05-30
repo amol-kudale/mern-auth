@@ -65,3 +65,9 @@ export const searchMembers = async (req, res, next) => {
     next(error);
   }
 };
+
+
+export const deleteMember = async (req, res) =>{
+  const result = await TeamUser.deleteOne({_id:req.params.memberId})
+  res.send(result);
+}

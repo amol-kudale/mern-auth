@@ -7,8 +7,11 @@ import {
 
 import "../assets/projectDetails.css";
 
+
 export default function NewProject() {
   const dispatch = useDispatch();
+  const {currentUser} = useSelector((state)=> state.user);
+  const currentUserId = currentUser._id;
   const { projects } = useSelector((state) => state.project);
   const currentProject = projects[projects.length - 1];
   const projectId = currentProject._id;
@@ -19,12 +22,94 @@ export default function NewProject() {
   const [flats, showFlats] = useState(false);
   const [flatsData, setFlatsData] = useState([]); // State to hold flats information
 
+  const [project, setProject] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [members, setMembers] = useState([]);
+  const [selectedMembers, setSelectedMembers] = useState([]);
+
   const handleWingClick = () => {
     showWings(true);
+    showMemberList(false);
   };
   const handleAssignMemberClick = () => {
     showMemberList(true);
+    showWings(false);
   };
+  useEffect(() => {
+    fetchProject();
+    fetchMembers();
+  }, []);
+
+
+  const fetchProject = async () => {
+    try {
+      const response = await fetch(`/api/project/project-details/${projectId}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const result = await response.json();
+      console.log("this is project details")
+      setProject(result);
+      console.warn(result)
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  if (loading) return <p>Loading project details...</p>;
+  if (error) return <p>Error fetching project details: {error.message}</p>;
+
+  const fetchMembers = async () => {
+    try {
+      const response = await fetch(`/api/teamuser/members/${currentUserId}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const result = await response.json();
+      setMembers(result);
+    } catch (error) {
+      console.error("Error fetching members:", error);
+    }
+  };
+
+  const handleMemberSelection = (memberId) => {
+    setSelectedMembers(prev => {
+      if (prev.includes(memberId)) {
+        return prev.filter(id => id !== memberId);
+      } else {
+        return [...prev, memberId];
+      }
+    });
+  };
+
+  const handleAllocateMembers = async () => {
+    try {
+
+      // const selectedMemberObjects = members.filter(member => selectedMembers.includes(member._id));
+
+      const response = await fetch(`/api/project/allocate-members/${projectId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ members: selectedMembers }),
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok for member allocation');
+      }
+      fetchProject();
+    } catch (error) {
+      console.error("Error allocating members:", error);
+    }
+  };
+
+  const filteredMembers = members.filter((member) =>
+    project.teamMembers.some((teamMember) => teamMember === member._id)
+  );
+  console.log(filteredMembers , "filtered members")
+
 
   const handleWingSubmit = async (e) => {
     e.preventDefault();
@@ -314,7 +399,49 @@ export default function NewProject() {
         </div>
       )}
 
+<<<<<<< HEAD
       {memberList == true && <div></div>}
+=======
+      {
+        memberList == true &&(
+          <div>
+            
+                <h1>Allocated Members</h1>
+            <div className='allocated-members'>
+                  
+                  {
+                    filteredMembers.map((member)=>(
+                      <li  key={member._id}>
+                        {member.name}
+                      </li>
+                    ))
+                  }
+            </div> 
+            <br /><br />
+            <div className='allocate-member-list' >
+              {members.map((member) => (
+
+              
+              
+                
+                <div className='member-allocation' key={member._id}>
+                
+                  <input
+                    type="checkbox"
+                    onChange={() => handleMemberSelection(member._id)}
+                    checked={selectedMembers.includes(member._id)}
+                  />
+                  {member.name}
+                </div>
+              
+              )
+              )}
+            </div>
+              <button className='btn-primary' onClick={handleAllocateMembers}>Allocate Members</button>
+          </div>
+        )
+      }
+>>>>>>> 138db0923d26206ee41a11b754f7c8ec7bd41208
     </>
   );
 }

@@ -49,6 +49,20 @@ const ShowMember = () => {
     }
   };
 
+  const deleteMember = async (memberId) =>{
+    let conf = confirm("Do you want to delete Member?")
+    if(conf){
+
+      let result = await fetch(`/api/teamuser/members/${memberId}`,{
+        method: "Delete"
+      })
+      result = await result.json()
+      if(result){
+        getMembers()
+      }
+    } 
+  }
+
   return (
     <>
       <div className="member-list-header border-solid border-4 border-blue-50 p-8">
@@ -74,6 +88,7 @@ const ShowMember = () => {
               <th>Role</th>
               <th>Contact</th>
               <th>Email</th>
+              <th className='font-normal'>Operations</th>
             </tr>
           </thead>
           <tbody>
@@ -85,6 +100,7 @@ const ShowMember = () => {
                   <td>{item.role}</td>
                   <td>{item.contact}</td>
                   <td>{item.email}</td>
+                  <button onClick={() => deleteMember(item._id)} className=' text-xs btn-third'>Delete</button>
                 </tr>
               ))
             ) : (

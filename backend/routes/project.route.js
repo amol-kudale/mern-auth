@@ -7,6 +7,7 @@ import {
   getProjectById,
   updateProject,
   allocateMembersToProject,
+  getWingDetails,
 } from "../controllers/project.controller.js";
 
 const router = express.Router();
@@ -25,5 +26,6 @@ router.put('/project-details/:projectId', updateProject);
 
 router.post('/allocate-members/:projectId', allocateMembersToProject);
 
+router.get('/wing/:wingId', getWingDetails);
 
 export default router;
