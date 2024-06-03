@@ -399,49 +399,7 @@ export default function NewProject() {
         </div>
       )}
 
-<<<<<<< HEAD
-      {memberList == true && <div></div>}
-=======
-      {
-        memberList == true &&(
-          <div>
-            
-                <h1>Allocated Members</h1>
-            <div className='allocated-members'>
-                  
-                  {
-                    filteredMembers.map((member)=>(
-                      <li  key={member._id}>
-                        {member.name}
-                      </li>
-                    ))
-                  }
-            </div> 
-            <br /><br />
-            <div className='allocate-member-list' >
-              {members.map((member) => (
-
-              
-              
-                
-                <div className='member-allocation' key={member._id}>
-                
-                  <input
-                    type="checkbox"
-                    onChange={() => handleMemberSelection(member._id)}
-                    checked={selectedMembers.includes(member._id)}
-                  />
-                  {member.name}
-                </div>
-              
-              )
-              )}
-            </div>
-              <button className='btn-primary' onClick={handleAllocateMembers}>Allocate Members</button>
-          </div>
-        )
-      }
->>>>>>> 138db0923d26206ee41a11b754f7c8ec7bd41208
     </>
   );
 }
+
